@@ -8,15 +8,34 @@
     <meta name="author" content="" />
     <meta name="author" content="Your Name Here" />
     <meta name="Copyright" content="Copyright Your Name Here 2013. All Rights Reserved." />
+    <script type="text/javascript" src="jquery.js"></script>
 </head>
 <body>
 
 <h3>TODO App</h3>
 
-<ul>
-    <li>Tasks here</li>
-</ul>
-<input type="text"/>
+<p>Your tasks </p>
+<ul id="taskListWrap"></ul>
+<input type="text"  id="taskInput" name="task_input" value=""/>
+<p>Press enter to add the task  to list. Pres Esc to clear the input.</p>
+<script type="text/javascript">
+  $(document).ready(function(){
+      $(document).on('keyup', '#taskInput', function (evt){
+          
+          // To add the text
+          if(evt.keyCode === 13 && $(this).val().length > 0){
+            // Enter button pressed
+            // Add text to list as task
+            $('#taskListWrap').append('<li>'+$(this).val()+'</li>');
+            $(this).val('');
+          }
 
+          // Empty the input box if "Esc" key is pressed  
+          if(evt.keyCode === 27){
+              $(this).val(''); 
+          }
+      });
+  });
+</script>
 </body>
 </html> 
