@@ -9,6 +9,25 @@
     <meta name="author" content="Your Name Here" />
     <meta name="Copyright" content="Copyright Your Name Here 2013. All Rights Reserved." />
     <script type="text/javascript" src="jquery.js"></script>
+    <style type="text/css">
+      .task-li{
+        width: 200px;
+      }
+      .task-done .task-text{
+        text-decoration: line-through;
+      }
+      .remove-task{
+        display: none;
+        cursor: pointer;
+      }
+      .task-li:hover .task-text{
+        background-color: #ccc;
+      }
+      .task-li:hover .remove-task{
+        display: inline;
+      }
+
+    </style>
 </head>
 <body>
 
@@ -20,13 +39,22 @@
 <p>Press enter to add the task  to list. Pres Esc to clear the input.</p>
 <script type="text/javascript">
   $(document).ready(function(){
+
+      // Handle keyup on task input
       $(document).on('keyup', '#taskInput', function (evt){
           
           // To add the text
           if(evt.keyCode === 13 && $(this).val().length > 0){
             // Enter button pressed
             // Add text to list as task
-            $('#taskListWrap').append('<li>'+$(this).val()+'</li>');
+            $('#taskListWrap').append('<li class="task-li"><input type="checkbox" name="task" class="task-checkbox"/>'
+              + '<span class="task-text">'
+              + $(this).val() 
+              + '</span>'
+              + '<span class="remove-task">' 
+              + '&times;'
+              + '</span>'
+              + '</li>');
             $(this).val('');
           }
 
@@ -35,6 +63,22 @@
               $(this).val(''); 
           }
       });
+
+      // Handle mark done/undone click
+      $(document).on('click', '.task-checkbox', function () {
+        var parentLi = $(this).parent('.task-li');
+        parentLi.removeClass('task-done');
+        if($(this).is(':checked')){
+          parentLi.addClass('task-done');
+        }
+      });
+
+      // Handle remove button click
+      $(document).on('click', '.remove-task', function () {
+        var parentLi = $(this).parent('.task-li');
+        parentLi.remove();
+      });
+
   });
 </script>
 </body>
