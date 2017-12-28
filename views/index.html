@@ -26,7 +26,15 @@
       .task-li:hover .remove-task{
         display: inline;
       }
-
+      .task-li.task-edit-mode .task-text{
+        display: none;
+      }
+      .task-edit-wrap{
+        display: none;
+      }
+      .task-li.task-edit-mode .task-edit-wrap{
+        display: inline;
+      }
     </style>
 </head>
 <body>
@@ -38,6 +46,13 @@
 <input type="text"  id="taskInput" name="task_input" value=""/>
 <p>Press enter to add the task  to list. Pres Esc to clear the input.</p>
 <script type="text/javascript">
+  // Function to save task li
+  saveTaskText = function (thisLi) {
+    var newTaskText = thisLi.find('.task-edit-wrap>input').val();
+    thisLi.find('.task-text').html(newTaskText);
+    thisLi.removeClass('task-edit-mode');
+  }
+      
   $(document).ready(function(){
 
       // Handle keyup on task input
@@ -51,6 +66,7 @@
               + '<span class="task-text">'
               + $(this).val() 
               + '</span>'
+              + '<span class="task-edit-wrap"><input type="text" name="task-edit-input"/></span>'
               + '<span class="remove-task">' 
               + '&times;'
               + '</span>'
@@ -60,7 +76,7 @@
 
           // Empty the input box if "Esc" key is pressed  
           if(evt.keyCode === 27){
-              $(this).val(''); 
+              $(this).val('');  
           }
       });
 
@@ -78,6 +94,45 @@
         var parentLi = $(this).parent('.task-li');
         parentLi.remove();
       });
+
+      // Hnadle task text click
+      $(document).on('click', '.task-text', function (evt) {
+        evt.stopPropagation();
+        var parentLi = $(this).parent('.task-li');
+        parentLi.addClass('task-edit-mode');
+        if(parentLi.hasClass('task-edit-mode')){
+          parentLi.find('.task-edit-wrap>input').val(parentLi.find('.task-text').html())
+          parentLi.find('.task-edit-wrap>input').focus();
+        }
+      });
+
+      // Handle task input click
+      $(document).on('click', '.task-edit-wrap>input', function (evt) {
+        evt.stopPropagation();
+        
+
+      });      
+
+      // Handle task input keyup
+      $(document).on('keyup', '.task-edit-wrap>input', function (evt) {
+        evt.stopPropagation();
+        if(evt.keyCode === 13){
+          var parentLi = $(this).parent('.task-li');
+          saveTaskText(parentLi);
+        }
+
+      });      
+
+      // Handle body click
+      $(document).on('click', 'body', function(evt){
+        evt.stopPropagation();
+        $('.task-li.task-edit-mode').each(function(){
+          var thisLi = $(this);
+          saveTaskText(thisLi);
+        });
+      });
+
+      
 
   });
 </script>
