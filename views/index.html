@@ -41,7 +41,7 @@
 
 <h3>TODO App</h3>
 
-<p>Your tasks </p>
+<p><span class="total-tasks"></span> </p>
 <ul id="taskListWrap"></ul>
 <input type="text"  id="taskInput" name="task_input" value=""/>
 <p>Press enter to add the task  to list. Pres Esc to clear the input.</p>
@@ -49,11 +49,24 @@
   // Function to save task li
   saveTaskText = function (thisLi) {
     var newTaskText = thisLi.find('.task-edit-wrap>input').val();
+    if(!newTaskText){
+      thisLi.remove();
+      // Update task count
+      updateTaskCount();
+      return false;
+    }
     thisLi.find('.task-text').html(newTaskText);
     thisLi.removeClass('task-edit-mode');
   }
+
+  // Function to update tasks count
+  updateTaskCount = function () {
+    $('.total-tasks').html('Total ' + $('.task-li').length + ' Tasks')
+  }
       
   $(document).ready(function(){
+      // Update task count
+      updateTaskCount();
 
       // Handle keyup on task input
       $(document).on('keyup', '#taskInput', function (evt){
@@ -78,6 +91,9 @@
           if(evt.keyCode === 27){
               $(this).val('');  
           }
+        
+        // Update task count
+        updateTaskCount();
       });
 
       // Handle mark done/undone click
@@ -93,10 +109,11 @@
       $(document).on('click', '.remove-task', function () {
         var parentLi = $(this).parent('.task-li');
         parentLi.remove();
+        updateTaskCount();
       });
 
       // Hnadle task text click
-      $(document).on('click', '.task-text', function (evt) {
+      $(document).on('dblclick', '.task-text', function (evt) {
         evt.stopPropagation();
         var parentLi = $(this).parent('.task-li');
         parentLi.addClass('task-edit-mode');
@@ -109,15 +126,14 @@
       // Handle task input click
       $(document).on('click', '.task-edit-wrap>input', function (evt) {
         evt.stopPropagation();
-        
-
       });      
 
       // Handle task input keyup
       $(document).on('keyup', '.task-edit-wrap>input', function (evt) {
         evt.stopPropagation();
+
         if(evt.keyCode === 13){
-          var parentLi = $(this).parent('.task-li');
+          var parentLi = $(this).parent('.task-edit-wrap').parent('.task-li');
           saveTaskText(parentLi);
         }
 
