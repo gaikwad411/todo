@@ -9,6 +9,7 @@
     <meta name="author" content="Your Name Here" />
     <meta name="Copyright" content="Copyright Your Name Here 2013. All Rights Reserved." />
     <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="moment.js"></script>
     <style type="text/css">
       .task-li{
         width: 200px;
@@ -27,6 +28,9 @@
         display: inline;
       }
       .task-li.task-edit-mode .task-text{
+        display: none;
+      }
+      .task-li.task-edit-mode .task-create-time{
         display: none;
       }
       .task-edit-wrap{
@@ -70,12 +74,15 @@
 
       // Handle keyup on task input
       $(document).on('keyup', '#taskInput', function (evt){
-          
+          var currentDateStr = moment().format('hh:mm d-MMM-YY');
+
           // To add the text
           if(evt.keyCode === 13 && $(this).val().length > 0){
             // Enter button pressed
             // Add text to list as task
             $('#taskListWrap').append('<li class="task-li"><input type="checkbox" name="task" class="task-checkbox"/>'
+              + '<span>Red Green Amber</span>' 
+              // Red means task is blocked, green means task is in progress, Amber means task is stopped, 
               + '<span class="task-text">'
               + $(this).val() 
               + '</span>'
@@ -83,6 +90,7 @@
               + '<span class="remove-task">' 
               + '&times;'
               + '</span>'
+              + '<div class="task-create-time">' + currentDateStr + '</div>'
               + '</li>');
             $(this).val('');
           }
