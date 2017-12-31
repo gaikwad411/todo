@@ -11,8 +11,31 @@
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="moment.js"></script>
     <style type="text/css">
+      #taskListWrap{
+        list-style: none;
+        padding: 3px;
+        margin: 3px;
+      }
+      #taskListWrap li {
+        padding: 3px;
+        margin: 3px;
+      }
+      #taskListWrap li .task-text{
+        font-size: 22px;
+      }
+      #taskListWrap li .task-create-time{
+        font-size: 14px;
+        padding: 3px 3px 3px 20px;
+        color: #555;
+        font-style: italic;
+      }
+      #taskListWrap li .task-edit-wrap input{
+        outline: none;
+        border-width: 0;
+        font-size: 20px;
+      }
+
       .task-li{
-        width: 200px;
       }
       .task-done .task-text{
         text-decoration: line-through;
@@ -39,16 +62,36 @@
       .task-li.task-edit-mode .task-edit-wrap{
         display: inline;
       }
+      #taskInput{
+        padding: 3px;
+        margin: 3px;
+        width: 80%;
+      }
+      #tasksPanelWrap{
+        width: 500px;
+        margin: 10px auto;
+        text-align: center;
+        box-shadow: 2px 2px #ccc;
+        border-radius: 3px;
+        border: 1px solid #999;
+      }
+      #tasksPanelWrap #taskListWrap{
+        text-align: left;
+      }
     </style>
 </head>
 <body>
 
+
 <h3>TODO App</h3>
 
-<p><span class="total-tasks"></span> </p>
-<ul id="taskListWrap"></ul>
-<input type="text"  id="taskInput" name="task_input" value=""/>
-<p>Press enter to add the task  to list. Pres Esc to clear the input.</p>
+<div id="tasksPanelWrap">
+  <p><span class="total-tasks"></span> </p>
+  <ul id="taskListWrap"></ul>
+  <input type="text"  id="taskInput" name="task_input" value=""/>
+  <p>Press enter to add the task  to list. Pres Esc to clear the input.</p>
+</div>
+
 <script type="text/javascript">
   // Function to save task li
   saveTaskText = function (thisLi) {
@@ -74,14 +117,13 @@
 
       // Handle keyup on task input
       $(document).on('keyup', '#taskInput', function (evt){
-          var currentDateStr = moment().format('hh:mm d-MMM-YY');
+          var currentDateStr = moment().format('hh:mm DD-MMM-YY');
 
           // To add the text
           if(evt.keyCode === 13 && $(this).val().length > 0){
             // Enter button pressed
             // Add text to list as task
             $('#taskListWrap').append('<li class="task-li"><input type="checkbox" name="task" class="task-checkbox"/>'
-              + '<span>Red Green Amber</span>' 
               // Red means task is blocked, green means task is in progress, Amber means task is stopped, 
               + '<span class="task-text">'
               + $(this).val() 
