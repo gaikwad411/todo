@@ -93,6 +93,8 @@
 </div>
 
 <script type="text/javascript">
+  var apiBaseURL = 'http://localhost:3000/api/';
+
   // Function to save task li
   saveTaskText = function (thisLi) {
     var newTaskText = thisLi.find('.task-edit-wrap>input').val();
@@ -110,10 +112,46 @@
   updateTaskCount = function () {
     $('.total-tasks').html('Total ' + $('.task-li').length + ' Tasks')
   }
+
+  // get tasks from api
+  var getTasksFromAPI=function(){
+    console.log('Get tasks from API.....');
+    $.ajax({method: 'GET', dataType: 'json', 
+          contentType: "application/json",
+          url: apiBaseURL + 'tasks', 
+          success: function (tasks){
+          // on success
+          console.log(tasks);
+          tasks.forEach(function(task){
+            task.createDateTime = '';
+            addTaskToUI(task);
+          });
+          updateTaskCount();
+    }});
+  };
+
+  // add task to ui
+  var addTaskToUI = function (task){
+              $('#taskListWrap').append('<li class="task-li"><input type="checkbox" name="task" class="task-checkbox"/>'
+              + '<span class="task-text">'
+              + task.title 
+              + '</span>'
+              + '<span class="task-edit-wrap"><input type="text" name="task-edit-input"/></span>'
+              + '<span class="remove-task">' 
+              + '&times;'
+              + '</span>'
+              + '<div class="task-create-time">' + task.createDateTime + '</div>'
+              + '</li>');
+  };
       
   $(document).ready(function(){
+      // add task to ui
+      getTasksFromAPI();
+
       // Update task count
       updateTaskCount();
+
+
 
       // Handle keyup on task input
       $(document).on('keyup', '#taskInput', function (evt){
@@ -123,17 +161,16 @@
           if(evt.keyCode === 13 && $(this).val().length > 0){
             // Enter button pressed
             // Add text to list as task
-            $('#taskListWrap').append('<li class="task-li"><input type="checkbox" name="task" class="task-checkbox"/>'
-              // Red means task is blocked, green means task is in progress, Amber means task is stopped, 
-              + '<span class="task-text">'
-              + $(this).val() 
-              + '</span>'
-              + '<span class="task-edit-wrap"><input type="text" name="task-edit-input"/></span>'
-              + '<span class="remove-task">' 
-              + '&times;'
-              + '</span>'
-              + '<div class="task-create-time">' + currentDateStr + '</div>'
-              + '</li>');
+            addTaskToUI({title: $(this).val(), createDateTime: currentDateStr});
+
+            var newTaskText = $(this).val();
+            $.ajax({method: 'POST', dataType: 'json', 
+              contentType: "application/json",
+              url: apiBaseURL + 'tasks', data: JSON.stringify({taskText: newTaskText}), success: function (data){
+              // on success
+              console.log(data);
+            }});
+
             $(this).val('');
           }
 
