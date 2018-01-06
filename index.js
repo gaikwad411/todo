@@ -27,7 +27,7 @@ app.get('/moment.js', (req, res) => res.sendFile(path.join(__dirname, 'node_modu
 
 // get tasks
 app.get('/api/tasks', (req, res) => {
-  taskModel.find({}, 'title', function (err, tasks) {
+  taskModel.find({}, 'id title', function (err, tasks) {
     if (err) return handleError(err);
     // 'athletes' contains the list of athletes that match the criteria.
     res.send(tasks);
@@ -56,9 +56,9 @@ app.post('/api/tasks', (req, res) => {
             if (err) return handleError(err);
             // saved!
             console.log('Saved!!!!');
-            
+            res.send(awesome_instance);  
           });
-          res.send([{'task-title': 'test'}]);  
+            
 
         });
     }
@@ -71,12 +71,60 @@ app.post('/api/tasks', (req, res) => {
 
 // put task update task
 app.put('/api/tasks', (req, res) => {
-  res.send([{'task-title': 'test'}]);
+  if (req.method == 'PUT') {
+        var jsonString = '';
+
+        req.on('data', function (data) {
+            jsonString += data;
+        });
+
+        req.on('end', function () {
+          var postedData = JSON.parse(jsonString);
+            console.log(postedData);
+           // Create an instance of model SomeModel
+          //var awesome_instance = new taskModel({ title: postedData.taskText });
+          taskModel.findOne({'_id': postedData.id}, '_id title', {}, function(err, task){
+            if (err) return handleError(err);
+            task.title = postedData.title;
+            task.save(function(err){
+                if (err) return handleError(err);
+            // saved!
+            console.log('Saved!!!!');
+                res.send(task);
+            });
+          });
+
+
+        });
+    }
+
 });
 
 // delele task remove task
 app.delete('/api/tasks', (req, res) => {
-  res.send([{'task-title': 'test'}]);
+  
+  if (req.method == 'DELETE') {
+        var jsonString = '';
+
+        req.on('data', function (data) {
+            jsonString += data;
+        });
+
+        req.on('end', function () {
+          var postedData = JSON.parse(jsonString);
+            console.log(postedData);
+           // Create an instance of model SomeModel
+          //var awesome_instance = new taskModel({ title: postedData.taskText });
+          taskModel.deleteOne({'_id': postedData.id}, function(err, task){
+            if (err) return handleError(err);
+            res.send('Task deleted');
+          });
+
+
+        });
+    }
+
+
 });
 
 
