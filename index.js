@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const path = require('path');
 var taskModel = require('./models').taskModel;
+var moment = require('moment');
 
 //Import the mongoose module
 var mongoose = require('mongoose');
@@ -27,7 +28,7 @@ app.get('/moment.js', (req, res) => res.sendFile(path.join(__dirname, 'node_modu
 
 // get tasks
 app.get('/api/tasks', (req, res) => {
-  taskModel.find({}, 'id title', function (err, tasks) {
+  taskModel.find({}, 'id title createDateTimeTS', function (err, tasks) {
     if (err) return handleError(err);
     // 'athletes' contains the list of athletes that match the criteria.
     res.send(tasks);
@@ -49,7 +50,7 @@ app.post('/api/tasks', (req, res) => {
           var postedData = JSON.parse(jsonString);
             console.log(postedData);
            // Create an instance of model SomeModel
-          var awesome_instance = new taskModel({ title: postedData.taskText });
+          var awesome_instance = new taskModel({ title: postedData.taskText, createDateTimeTS: postedData.createDateTimeTS});
 
           // Save the new model instance, passing a callback
           awesome_instance.save(function (err) {

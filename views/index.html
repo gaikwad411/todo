@@ -147,7 +147,7 @@
       if(!task._id){
         task._id = 'task_tmp_id' + (new Date()).getTime() + Math.random(11,99);
       }
-
+      console.log('>>>>>>>>>>>', task.createDateTimeTS);
       $('#taskListWrap')
       .append('<li class="task-li" data-task-id="' + task._id + '"><input type="checkbox" name="task" class="task-checkbox"/>'
       + '<span class="task-text">'
@@ -157,7 +157,7 @@
       + '<span class="remove-task">' 
       + '&times;'
       + '</span>'
-      + '<div class="task-create-time">' + task.createDateTime + '</div>'
+      + '<div class="task-create-time">' + moment.utc(task.createDateTimeTS).local().format('hh:mm DD-MMM-YY') + '</div>'
       + '</li>');
       
       var li = $('[data-task-id="' + task._id + '"]');
@@ -181,12 +181,12 @@
           if(evt.keyCode === 13 && $(this).val().length > 0){
             // Enter button pressed
             // Add text to list as task
-            var addedLi = addTaskToUI({title: $(this).val(), createDateTime: currentDateStr});
+            var addedLi = addTaskToUI({title: $(this).val(), createDateTimeTS: moment().utc().valueOf() });
 
             var newTaskText = $(this).val();
             $.ajax({method: 'POST', dataType: 'json', 
               contentType: "application/json",
-              url: apiBaseURL + 'tasks', data: JSON.stringify({taskText: newTaskText}), 
+              url: apiBaseURL + 'tasks', data: JSON.stringify({taskText: newTaskText, createDateTimeTS: moment().utc().valueOf()}), 
               success: function (task){
               // on success
               addedLi.attr('data-task-id', task._id);
