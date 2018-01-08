@@ -26,78 +26,74 @@ app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'views', 'index.htm
 app.get('/jquery.js', (req, res) => res.sendFile(path.join(__dirname, 'node_modules', 'jquery', 'dist', 'jquery.min.js')));
 app.get('/moment.js', (req, res) => res.sendFile(path.join(__dirname, 'node_modules', 'moment', 'moment.js')));
 
+
+var handleError = function(err){
+  console.log('Error:', err);
+}
+
 // get tasks
 app.get('/api/tasks', (req, res) => {
+  // Find tasks
   taskModel.find({}, 'id title createDateTimeTS', function (err, tasks) {
-    if (err) return handleError(err);
-    // 'athletes' contains the list of athletes that match the criteria.
+    if (err){
+      res.status(500).send([]);
+      return handleError(err);
+    } 
     res.send(tasks);
   });
-  
 });
+
 
 // post task create task
 app.post('/api/tasks', (req, res) => {
 
-  if (req.method == 'POST') {
-        var jsonString = '';
+  var jsonString = '';
 
-        req.on('data', function (data) {
-            jsonString += data;
-        });
+  req.on('data', function (data) {
+      jsonString += data;
+  });
 
-        req.on('end', function () {
-          var postedData = JSON.parse(jsonString);
-            console.log(postedData);
-           // Create an instance of model SomeModel
-          var awesome_instance = new taskModel({ title: postedData.taskText, createDateTimeTS: postedData.createDateTimeTS});
+  req.on('end', function () {
+    var postedData = JSON.parse(jsonString);
 
-          // Save the new model instance, passing a callback
-          awesome_instance.save(function (err) {
-            if (err) return handleError(err);
-            // saved!
-            console.log('Saved!!!!');
-            res.send(awesome_instance);  
-          });
-            
+    // create task instance
+    var task_instance = new taskModel({ title: postedData.taskText, createDateTimeTS: postedData.createDateTimeTS});
 
-        });
-    }
+    // Save the new model instance, passing a callback
+    task_instance.save(function (err) {
+      if (err){
+         res.status(500).send({});
+         return handleError(err)
+      };
+      res.status(201).send(task_instance);  
+    });
+  });
 
-  
- 
-
-  
 });
+
 
 // put task update task
 app.put('/api/tasks', (req, res) => {
-  if (req.method == 'PUT') {
-        var jsonString = '';
+  var jsonString = '';
 
-        req.on('data', function (data) {
-            jsonString += data;
-        });
+  req.on('data', function (data) {
+      jsonString += data;
+  });
 
-        req.on('end', function () {
-          var postedData = JSON.parse(jsonString);
-            console.log(postedData);
-           // Create an instance of model SomeModel
-          //var awesome_instance = new taskModel({ title: postedData.taskText });
-          taskModel.findOne({'_id': postedData.id}, '_id title', {}, function(err, task){
-            if (err) return handleError(err);
-            task.title = postedData.title;
-            task.save(function(err){
-                if (err) return handleError(err);
-            // saved!
-            console.log('Saved!!!!');
-                res.send(task);
-            });
-          });
-
-
-        });
-    }
+  req.on('end', function () {
+    var postedData = JSON.parse(jsonString);
+    console.log(postedData);
+    taskModel.findOne({'_id': postedData.id}, '_id title', {}, function(err, task){
+      if (err) return handleError(err);
+      task.title = postedData.title;
+      task.save(function(err){
+          if (err) return handleError(err);
+      // saved!
+      console.log('Saved!!!!');
+          res.send(task);
+      });
+    });
+  });
 
 });
 
