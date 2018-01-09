@@ -74,6 +74,7 @@ app.post('/api/tasks', (req, res) => {
 
 // put task update task
 app.put('/api/tasks', (req, res) => {
+  
   var jsonString = '';
 
   req.on('data', function (data) {
@@ -82,14 +83,26 @@ app.put('/api/tasks', (req, res) => {
 
   req.on('end', function () {
     var postedData = JSON.parse(jsonString);
-    console.log(postedData);
+    
+    // Find task
     taskModel.findOne({'_id': postedData.id}, '_id title', {}, function(err, task){
-      if (err) return handleError(err);
+      if (err){
+         // Could not get the task
+         res.status(500).send({});
+         return handleError(err);
+      }
+
+      // Update the task attributes
       task.title = postedData.title;
+      
+      // Save updated task
       task.save(function(err){
-          if (err) return handleError(err);
-      // saved!
-      console.log('Saved!!!!');
+          if (err){
+            // Could not save the task
+            res.status(500).send({});
+            return handleError(err);
+          }
+      
           res.send(task);
       });
     });
@@ -97,32 +110,28 @@ app.put('/api/tasks', (req, res) => {
 
 });
 
-// delele task remove task
+// Delele task by id
 app.delete('/api/tasks', (req, res) => {
   
-  if (req.method == 'DELETE') {
-        var jsonString = '';
+  var jsonString = '';
 
-        req.on('data', function (data) {
-            jsonString += data;
-        });
+  req.on('data', function (data) {
+      jsonString += data;
+  });
 
-        req.on('end', function () {
-          var postedData = JSON.parse(jsonString);
-            console.log(postedData);
-           // Create an instance of model SomeModel
-          //var awesome_instance = new taskModel({ title: postedData.taskText });
-          taskModel.deleteOne({'_id': postedData.id}, function(err, task){
-            if (err) return handleError(err);
-            res.send('Task deleted');
-          });
-
-
-        });
-    }
-
-
+  req.on('end', function () {
+    var postedData = JSON.parse(jsonString);
+    
+    // Delete the task by id  
+    taskModel.deleteOne({'_id': postedData.id}, function(err, task){
+      if (err){
+         res.status(500).send({});
+         return handleError(err);
+      }
+      res.send({userMessage: 'Task Deleted Successfully.'});
+    });
+  });
 });
 
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
+app.listen(3000, () => console.log('Todo app listening on port 3000!'));
