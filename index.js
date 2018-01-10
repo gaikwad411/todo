@@ -23,6 +23,10 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'views', 'index.html')));
 
+app.get('/style.css', (req, res) => res.sendFile(path.join(__dirname, 'css',  'style.css')));
+app.get('/app.js', (req, res) => res.sendFile(path.join(__dirname, 'js', 'app.js')));
+
+
 app.get('/jquery.js', (req, res) => res.sendFile(path.join(__dirname, 'node_modules', 'jquery', 'dist', 'jquery.min.js')));
 app.get('/moment.js', (req, res) => res.sendFile(path.join(__dirname, 'node_modules', 'moment', 'moment.js')));
 
