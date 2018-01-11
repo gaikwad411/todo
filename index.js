@@ -38,7 +38,11 @@ var handleError = function(err){
 // get tasks
 app.get('/api/tasks', (req, res) => {
   // Find tasks
-  taskModel.find({}, 'id title createDateTimeTS', function (err, tasks) {
+  var query = taskModel.find({});
+  query.select('id title createDateTimeTS priority');
+  query.sort({priority: 1});
+
+  query.exec(function (err, tasks) {
     if (err){
       res.status(500).send([]);
       return handleError(err);
@@ -60,17 +64,37 @@ app.post('/api/tasks', (req, res) => {
   req.on('end', function () {
     var postedData = JSON.parse(jsonString);
 
-    // create task instance
-    var task_instance = new taskModel({ title: postedData.taskText, createDateTimeTS: postedData.createDateTimeTS});
+    // Find the priority
+    var query = taskModel.findOne({});
+    query.select('priority title');
+    query.sort({ priority: -1 });
 
-    // Save the new model instance, passing a callback
-    task_instance.save(function (err) {
-      if (err){
-         res.status(500).send({});
-         return handleError(err)
-      };
-      res.status(201).send(task_instance);  
+    // execute the query at a later time
+    query.exec(function (err, highestPriorityRec) {
+      if (err) return handleError(err);
+      console.log('====>', highestPriorityRec);
+        var priorityToSet = 1;
+        if(highestPriorityRec && highestPriorityRec.priority){
+          priorityToSet = highestPriorityRec.priority + 1
+        }
+
+        // create task instance
+        var task_instance = new taskModel({ title: postedData.taskText, createDateTimeTS: postedData.createDateTimeTS, 
+          priority: priorityToSet});
+
+        // Save the new model instance, passing a callback
+        task_instance.save(function (err) {
+          if (err){
+             res.status(500).send({});
+             return handleError(err)
+          };
+          res.status(201).send(task_instance);  
+        });
+
     });
+
+
+    
   });
 
 });
