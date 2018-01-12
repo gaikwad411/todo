@@ -1,4 +1,4 @@
-const express = require('express')
+  const express = require('express')
 const app = express()
 const path = require('path');
 var taskModel = require('./models').taskModel;
@@ -24,11 +24,15 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'views', 'index.html')));
 
 app.get('/style.css', (req, res) => res.sendFile(path.join(__dirname, 'css',  'style.css')));
+app.get('/jquery-ui.min.css', (req, res) => res.sendFile(path.join(__dirname, 'node_modules', 'jquery-ui-dist', 'jquery-ui.min.css')));
+app.get('/jquery-ui.theme.min.css', (req, res) => res.sendFile(path.join(__dirname, 'node_modules', 'jquery-ui-dist', 'jquery-ui.theme.min.css')));
+
 app.get('/app.js', (req, res) => res.sendFile(path.join(__dirname, 'js', 'app.js')));
 
 
 app.get('/jquery.js', (req, res) => res.sendFile(path.join(__dirname, 'node_modules', 'jquery', 'dist', 'jquery.min.js')));
 app.get('/moment.js', (req, res) => res.sendFile(path.join(__dirname, 'node_modules', 'moment', 'moment.js')));
+app.get('/jquery-ui.min.js', (req, res) => res.sendFile(path.join(__dirname, 'node_modules', 'jquery-ui-dist', 'jquery-ui.min.js')));
 
 
 var handleError = function(err){
