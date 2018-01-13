@@ -52,9 +52,13 @@ var apiBaseURL = 'http://localhost:3000/api/';
       if(!task._id){
         task._id = 'task_tmp_id' + (new Date()).getTime() + Math.random(11,99);
       }
-      console.log('>>>>>>>>>>>', task.createDateTimeTS);
+      
+      if(!task.priority){
+        task.priority = ($('#taskListWrap li').length + 1)
+      }
+
       $('#taskListWrap')
-      .append('<li class="task-li" data-task-id="' + task._id + '"><input type="checkbox" name="task" class="task-checkbox"/>'
+      .append('<li class="task-li" data-task-id="' + task._id + '" data-task-priority="' + task.priority + '" ><input type="checkbox" name="task" class="task-checkbox"/>'
       + '<span class="task-text">'
       + task.title 
       + '</span>'
@@ -70,6 +74,27 @@ var apiBaseURL = 'http://localhost:3000/api/';
   };
       
   $(document).ready(function(){
+      
+      $( "#taskListWrap" ).sortable({
+        update: function( event, ui ) {
+          var changedPriorities = [];
+          $('#taskListWrap li').each(function(){
+            var thisLi = $(this);
+            var newIndex = $('#taskListWrap li').index(thisLi);
+            var newPriority = newIndex + 1;
+            var oldPriority = parseInt(thisLi.attr('data-task-priority'));
+
+            if( newIndex !== -1 && oldPriority !== newPriority ){
+              changedPriorities.push({'taskId': thisLi.attr('data-task-id'), 'priority': newPriority });
+            }
+          });
+          // 
+          console.log('These are the changed priorities', changedPriorities);
+
+        }
+      });
+      $( "#taskListWrap" ).disableSelection();
+
       // add task to ui
       getTasksFromAPI();
 
@@ -95,6 +120,7 @@ var apiBaseURL = 'http://localhost:3000/api/';
               success: function (task){
               // on success
               addedLi.attr('data-task-id', task._id);
+              addedLi.attr('data-task-priority', task.priority);
             }});
 
             $(this).val('');
