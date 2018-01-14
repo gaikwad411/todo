@@ -142,6 +142,31 @@ app.put('/api/tasks', (req, res) => {
 
 });
 
+
+// put task update task priorities
+app.put('/api/tasks/priorities', (req, res) => {
+  
+  var jsonString = '';
+
+  req.on('data', function (data) {
+      jsonString += data;
+  });
+
+  req.on('end', function () {
+    var postedData = JSON.parse(jsonString);
+    
+    postedData.forEach(function(taskPriority){
+      taskModel.update({'_id': taskPriority.taskId}, 
+        {'priority': taskPriority.priority}, {}, function(err, raw){
+          //console.log(err);
+          //console.log('update callback', raw);
+        });
+    });
+    res.send(postedData);
+  });
+
+});
+
 // Delele task by id
 app.delete('/api/tasks', (req, res) => {
   

@@ -15,7 +15,6 @@ var apiBaseURL = 'http://localhost:3000/api/';
   
     // Save this task to live
     var taskId = thisLi.attr('data-task-id');
-    console.log(taskId);
     $.ajax({method: 'PUT', 
             dataType: 'json', 
               contentType: "application/json",
@@ -90,6 +89,16 @@ var apiBaseURL = 'http://localhost:3000/api/';
           });
           // 
           console.log('These are the changed priorities', changedPriorities);
+
+          
+           $.ajax({method: 'PUT', 
+            dataType: 'json', 
+              contentType: "application/json",
+              url: apiBaseURL + 'tasks/priorities', data: JSON.stringify(changedPriorities), 
+              success: function (data){
+              // on success
+              console.log('Prorities updated');
+            }});
 
         }
       });
