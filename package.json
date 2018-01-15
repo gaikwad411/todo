@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/gaikwad411/todo#readme",
   "dependencies": {
+    "bootstrap": "^3.3.7",
     "express": "^4.16.2",
     "jquery": "^3.2.1",
     "jquery-ui": "^1.12.1",

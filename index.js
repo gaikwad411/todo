@@ -26,6 +26,14 @@ app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'views', 'index.htm
 app.get('/style.css', (req, res) => res.sendFile(path.join(__dirname, 'css',  'style.css')));
 app.get('/jquery-ui.min.css', (req, res) => res.sendFile(path.join(__dirname, 'node_modules', 'jquery-ui-dist', 'jquery-ui.min.css')));
 app.get('/jquery-ui.theme.min.css', (req, res) => res.sendFile(path.join(__dirname, 'node_modules', 'jquery-ui-dist', 'jquery-ui.theme.min.css')));
+app.get('/bootstrap.min.css', (req, res) => res.sendFile(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'css', 'bootstrap.min.css')));
+app.get('/bootstrap-theme.min.css', (req, res) => res.sendFile(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'css', 'bootstrap-theme.min.css')));
+app.get('/bootstrap.min.js', (req, res) => res.sendFile(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'js', 'bootstrap.min.js')));
+
+
+
+
+
 
 app.get('/app.js', (req, res) => res.sendFile(path.join(__dirname, 'js', 'app.js')));
 
