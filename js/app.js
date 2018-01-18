@@ -74,6 +74,12 @@ var apiBaseURL = 'http://localhost:3000/api/';
       
   $(document).ready(function(){
       
+     $('#users-current-time').html(moment().format('hh:mm:ss'));
+     $('#users-current-date').html(moment().format('dddd DD, MMM YYYY'));
+     setInterval(function(){
+      $('#users-current-time').html(moment().format('hh:mm:ss'));
+     }, 1000);
+
       $( "#taskListWrap" ).sortable({
         update: function( event, ui ) {
           var changedPriorities = [];
