@@ -8,10 +8,9 @@
   margin: 3px;
 }
 #taskListWrap li .task-text{
-  font-size: 22px;
+  
 }
 #taskListWrap li .task-create-time{
-  font-size: 14px;
   padding: 3px 3px 3px 20px;
   color: #555;
   font-style: italic;
@@ -19,7 +18,6 @@
 #taskListWrap li .task-edit-wrap input{
   outline: none;
   border-width: 0;
-  font-size: 20px;
 }
 
 .task-li{
