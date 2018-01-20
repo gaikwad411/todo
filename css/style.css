@@ -12,7 +12,7 @@
 }
 #taskListWrap li .task-create-time{
   padding: 3px 3px 3px 20px;
-  color: #555;
+  color: powderblue;
   font-style: italic;
 }
 #taskListWrap li .task-edit-wrap input{
@@ -52,4 +52,17 @@
 
 #tasksPanelWrap #taskListWrap{
   text-align: left;
+}
+.tasks-panel-wrap{
+
+}
+.task-list-wrap{
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 3px;
+  background: cadetblue;
+  color: snow;
 }
