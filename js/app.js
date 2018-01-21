@@ -214,6 +214,10 @@ var apiBaseURL = 'http://localhost:3000/api/';
         });
       });
 
-      
+     
+      // add new task list button click handle
+     $(document).on('click', '#addNewTaskList', function (evt){
+        alert(1);
+     }); 
 
   });

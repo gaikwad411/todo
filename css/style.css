@@ -66,3 +66,6 @@
   background: cadetblue;
   color: snow;
 }
+.tasks-panel-wrap{
+  min-height: 500px;
+}
