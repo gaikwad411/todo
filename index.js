@@ -202,6 +202,19 @@ app.delete('/api/tasks', (req, res) => {
 // Create task list
 app.post('/api/tasklist', (req, res) => {
   // Handle task list creation
+
+  var jsonString = '';
+
+  req.on('data', function (data) {
+      jsonString += data;
+  });
+
+  req.on('end', function () {
+    var postedData = JSON.parse(jsonString);
+    console.log('This is posted data to create task list', postedData);
+  });
+
+
 });
 
 

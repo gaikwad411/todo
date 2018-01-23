@@ -219,6 +219,16 @@ var apiBaseURL = 'http://localhost:3000/api/';
      $(document).on('click', '#addNewTaskList', function (evt){
         // 
         
+        $.ajax({method: 'POST', dataType: 'json', 
+              contentType: "application/json",
+              url: apiBaseURL + 'tasklist', 
+              data: JSON.stringify({title: 'new task list', 
+                createDateTimeTS: moment().utc().valueOf()}), 
+              success: function (task){
+                // on success
+                console.log('on success task list', task);
+              }});
+               
      }); 
 
   });
