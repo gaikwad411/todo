@@ -71,6 +71,32 @@ var apiBaseURL = 'http://localhost:3000/api/';
       var li = $('[data-task-id="' + task._id + '"]');
       return li;
   };
+
+  // Function to add new task list
+  addNewTaskList(taskTitle){
+    
+    var postData = JSON.stringify({
+      title: taskTitle, 
+      createDateTimeTS: moment().utc().valueOf()
+    });
+
+    $.ajax({method: 'POST', dataType: 'json', 
+        contentType: "application/json",
+        url: apiBaseURL + 'tasklist', 
+        data: postData, 
+        success: function (task){
+          // on success
+           console.log('on success task list', task);
+        },
+        error: function(){
+          // on error
+           console.log('error for creating task');
+        },
+        done: function(){
+          // finally
+        }
+    });
+  }
       
   $(document).ready(function(){
       
@@ -219,15 +245,7 @@ var apiBaseURL = 'http://localhost:3000/api/';
      $(document).on('click', '#addNewTaskList', function (evt){
         // 
         
-        $.ajax({method: 'POST', dataType: 'json', 
-              contentType: "application/json",
-              url: apiBaseURL + 'tasklist', 
-              data: JSON.stringify({title: 'new task list', 
-                createDateTimeTS: moment().utc().valueOf()}), 
-              success: function (task){
-                // on success
-                console.log('on success task list', task);
-              }});
+        addNewTaskList();
                
      }); 
 
