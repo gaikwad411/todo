@@ -17,12 +17,12 @@ var apiBaseURL = 'http://localhost:3000/api/';
     var taskId = thisLi.attr('data-task-id');
     $.ajax({method: 'PUT', 
             dataType: 'json', 
-              contentType: "application/json",
-              url: apiBaseURL + 'tasks', data: JSON.stringify({title: newTaskText, id: taskId}), 
-              success: function (data){
-              // on success
-              console.log(data);
-            }});
+            contentType: "application/json",
+            url: apiBaseURL + 'tasks', data: JSON.stringify({title: newTaskText, id: taskId}), 
+            success: function (data){
+            // on success
+            console.log(data);
+          }});
 
   }
 

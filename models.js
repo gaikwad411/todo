@@ -10,10 +10,11 @@ exports.taskModel = taskModel;
 
 
 // Task List Model
-var taskList = new mongoose.Schema({
+/*var taskList = new mongoose.Schema({
   title: 'string', 
   createDateTimeTS: 'number', 
   priority: 'number', 
   createdByUser: 'userObj',
   taskList: 'taskListArray'
 });
+*/
